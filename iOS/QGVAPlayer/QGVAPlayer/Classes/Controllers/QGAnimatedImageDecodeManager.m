@@ -195,7 +195,7 @@
             return ;
         }
         NSError *error;
-        _audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL URLWithString:_fileInfo.filePath] error:&error];
+        _audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:_fileInfo.filePath] error:&error];
     }
 }
 

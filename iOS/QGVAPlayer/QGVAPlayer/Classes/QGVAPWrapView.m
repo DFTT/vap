@@ -50,6 +50,7 @@
         _vapView = [[VAPView alloc] initWithFrame:self.bounds];
         [self addSubview:_vapView];
     }
+    _vapView.hwd_enterBackgroundOP = self.hwd_enterBackgroundOP;
 }
 
 - (void)playHWDMP4:(NSString *)filePath
@@ -135,7 +136,7 @@
             }
             
             self.vapView.frame = CGRectMake(0, 0, realWidth, realHeight);
-            self.vapView.center = self.center;
+            self.vapView.center = CGPointMake(self.bounds.size.width / 2, self.bounds.size.height / 2);
         }
             break;;
         case QGVAPWrapViewContentModeAspectFill: {
@@ -148,7 +149,7 @@
             }
             
             self.vapView.frame = CGRectMake(0, 0, realWidth, realHeight);
-            self.vapView.center = self.center;
+            self.vapView.center = CGPointMake(self.bounds.size.width / 2, self.bounds.size.height / 2);
         }
             break;;
         default:
