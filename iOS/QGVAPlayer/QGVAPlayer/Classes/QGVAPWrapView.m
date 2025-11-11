@@ -123,7 +123,7 @@
     
     switch (self.contentMode) {
         case QGVAPWrapViewContentModeScaleToFill: {
-
+            self.vapView.frame = self.bounds;
         }
             break;
         case QGVAPWrapViewContentModeAspectFit: {
