@@ -69,6 +69,9 @@ typedef NS_ENUM(NSUInteger, HWDMP4EBOperationType) {
 
 //设置是否静音播放素材，注：在播放开始时进行设置，播放过程中设置无效，循环播放则设置后的下一次播放开始生效
 - (void)setMute:(BOOL)isMute;
+
+//音量范围0.0～1.0，默认1.0；越界值自动限制，NaN忽略。支持播放前及播放中设置。
+@property (nonatomic, assign) float volume;
 @end
 
 @interface UIView (VAPGesture)

@@ -66,6 +66,9 @@ typedef NS_ENUM(NSUInteger, QGVAPWrapViewContentMode) {
 //设置是否静音播放素材，注：在播放开始时进行设置，播放过程中设置无效
 - (void)setMute:(BOOL)isMute;
 
+//音量范围0.0～1.0，默认1.0；越界值自动限制，NaN忽略。支持播放前及播放中设置。
+@property (nonatomic, assign) float volume;
+
 //增加点击的手势识别, 如果开启了autoDestoryAfterFinish，那么手势将在播放完毕后失效
 - (void)addVapTapGesture:(VAPGestureEventBlock)handler;
 //手势识别通用接口, 如果开启了autoDestoryAfterFinish，那么手势将在播放完毕后失效

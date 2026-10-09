@@ -57,6 +57,7 @@ NSInteger const VapMaxCompatibleVersion = 2;
 @property (nonatomic, strong) QGVAPConfigManager            *hwd_configManager;         //额外的配置信息
 @property (nonatomic, strong) dispatch_queue_t              vap_renderQueue;            //播放队列
 @property (nonatomic, assign) BOOL                          vap_enableOldVersion;       //标记是否兼容不含vapc box的素材播放
+@property (nonatomic, strong) NSNumber                      *vap_volume;
 @property (nonatomic, assign) BOOL                          vap_isMute;                 //标记是否禁止音频播放
 @end
 
@@ -368,6 +369,7 @@ NSInteger const VapMaxCompatibleVersion = 2;
         self.vap_renderQueue = dispatch_queue_create("com.qgame.vap.render", DISPATCH_QUEUE_SERIAL);
     }
     self.hwd_decodeManager = [[QGAnimatedImageDecodeManager alloc] initWith:self.hwd_fileInfo config:self.hwd_decodeConfig delegate:self];
+    [self.hwd_decodeManager setVolume:self.volume];
     [self.hwd_configManager loadConfigResources]; //必须按先加载必要资源才能播放 - onVAPConfigResourcesLoaded
 }
 
@@ -498,6 +500,19 @@ NSInteger const VapMaxCompatibleVersion = 2;
 - (void)setMute:(BOOL)isMute {
     self.vap_isMute = isMute;
 }
+- (float)volume {
+    return self.vap_volume ? self.vap_volume.floatValue : 1.0f;
+}
+
+- (void)setVolume:(float)volume {
+    if (isnan(volume)) {
+        return;
+    }
+    volume = fminf(1.0f, fmaxf(0.0f, volume));
+    self.vap_volume = @(volume);
+    [self.hwd_decodeManager setVolume:volume];
+}
+
 #pragma mark - delegate
 
 #pragma clang diagnostic push
@@ -618,6 +633,7 @@ HWDSYNTH_DYNAMIC_PROPERTY_OBJECT(hwd_attachmentsModel, setHwd_attachmentsModel, 
 HWDSYNTH_DYNAMIC_PROPERTY_OBJECT(hwd_configManager, setHwd_configManager, OBJC_ASSOCIATION_RETAIN)
 HWDSYNTH_DYNAMIC_PROPERTY_OBJECT(vap_renderQueue, setVap_renderQueue, OBJC_ASSOCIATION_RETAIN)
 HWDSYNTH_DYNAMIC_PROPERTY_CTYPE(vap_enableOldVersion, setVap_enableOldVersion, BOOL)
+HWDSYNTH_DYNAMIC_PROPERTY_OBJECT(vap_volume, setVap_volume, OBJC_ASSOCIATION_RETAIN)
 HWDSYNTH_DYNAMIC_PROPERTY_CTYPE(vap_isMute, setVap_isMute, BOOL)
 @end
 

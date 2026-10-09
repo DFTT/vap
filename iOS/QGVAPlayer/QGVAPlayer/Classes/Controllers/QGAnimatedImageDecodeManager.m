@@ -90,6 +90,10 @@
     }
 }
 
+- (void)setVolume:(float)volume {
+    _audioPlayer.volume = volume;
+}
+
 - (void)tryToStartAudioPlay {
     if (!_audioPlayer) {
         return ;

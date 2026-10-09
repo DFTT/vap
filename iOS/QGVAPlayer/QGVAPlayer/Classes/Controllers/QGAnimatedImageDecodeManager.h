@@ -53,6 +53,7 @@
 
 - (QGBaseAnimatedImageFrame *)consumeDecodedFrame:(NSInteger)frameIndex;
 
+- (void)setVolume:(float)volume;
 - (void)tryToStartAudioPlay;
 - (void)tryToStopAudioPlay;
 - (void)tryToPauseAudioPlay;

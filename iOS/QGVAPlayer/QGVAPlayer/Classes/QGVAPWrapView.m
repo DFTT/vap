@@ -15,6 +15,7 @@
 
 #import "QGVAPWrapView.h"
 #import "QGVAPConfigModel.h"
+#import <math.h>
 
 @interface QGVAPWrapView()<VAPWrapViewDelegate, HWDMP4PlayDelegate>
 
@@ -40,7 +41,15 @@
     return self;
 }
 
+- (instancetype)initWithCoder:(NSCoder *)coder {
+    if (self = [super initWithCoder:coder]) {
+        _volume = 1.0f;
+    }
+    return self;
+}
+
 - (void)commonInit {
+    _volume = 1.0;
     _autoDestoryAfterFinish = YES;
 }
 
@@ -48,6 +57,7 @@
 - (void)initVAPViewIfNeed {
     if (!_vapView) {
         _vapView = [[VAPView alloc] initWithFrame:self.bounds];
+        [_vapView setVolume:self.volume];
         [self addSubview:_vapView];
     }
     _vapView.hwd_enterBackgroundOP = self.hwd_enterBackgroundOP;
@@ -78,6 +88,15 @@
 - (void)setMute:(BOOL)isMute {
     [self initVAPViewIfNeed];
     [self.vapView setMute:isMute];
+}
+
+- (void)setVolume:(float)volume {
+    if (isnan(volume)) {
+        return;
+    }
+    _volume = fminf(1.0f, fmaxf(0.0f, volume));
+    [self initVAPViewIfNeed];
+    [self.vapView setVolume:self.volume];
 }
 
 - (void)addVapGesture:(UIGestureRecognizer *)gestureRecognizer callback:(VAPGestureEventBlock)handler {

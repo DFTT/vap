@@ -14,31 +14,95 @@
 // limitations under the License.
 
 #import <XCTest/XCTest.h>
+#import <QGVAPlayer/QGVAPWrapView.h>
+#import "../QGVAPlayer/Classes/Controllers/QGAnimatedImageDecodeManager.h"
+#import <math.h>
+
+@interface VAPTestAudioPlayer : NSObject
+@property (nonatomic, assign) float volume;
+@end
+
+@implementation VAPTestAudioPlayer
+@end
 
 @interface QGVAPlayerTests : XCTestCase
-
 @end
 
 @implementation QGVAPlayerTests
 
-- (void)setUp {
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+- (void)testVolumeDefaultsAndBounds {
+    UIView *view = [UIView new];
+    XCTAssertEqual(view.volume, 1.0f);
+    view.volume = 0.4f;
+    XCTAssertEqual(view.volume, 0.4f);
+    view.volume = NAN;
+    XCTAssertEqual(view.volume, 0.4f);
+    view.volume = -1.0f;
+    XCTAssertEqual(view.volume, 0.0f);
+    view.volume = 2.0f;
+    XCTAssertEqual(view.volume, 1.0f);
+    view.volume = -INFINITY;
+    XCTAssertEqual(view.volume, 0.0f);
+    view.volume = INFINITY;
+    XCTAssertEqual(view.volume, 1.0f);
 }
 
-- (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
+- (void)testVolumeDoesNotEnableMutedAudio {
+    UIView *view = [UIView new];
+    [view setMute:YES];
+    view.volume = 0.8f;
+    XCTAssertFalse([(id<QGAnimatedImageDecoderDelegate>)view shouldSetupAudioPlayer]);
+    [view setMute:NO];
+    XCTAssertTrue([(id<QGAnimatedImageDecoderDelegate>)view shouldSetupAudioPlayer]);
+    XCTAssertEqual(view.volume, 0.8f);
+    QGAnimatedImageDecodeManager *manager = [QGAnimatedImageDecodeManager new];
+    [manager setVolume:0.8f];
+    XCTAssertNil([manager valueForKey:@"audioPlayer"]);
 }
 
-- (void)testExample {
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
+- (void)testVolumeUpdatesAudioPlayer {
+    QGVAPWrapView *view = [[QGVAPWrapView alloc] initWithFrame:CGRectZero];
+    [view setMute:NO];
+    UIView *innerView = [view valueForKey:@"vapView"];
+    QGAnimatedImageDecodeManager *manager = [QGAnimatedImageDecodeManager new];
+    VAPTestAudioPlayer *audioPlayer = [VAPTestAudioPlayer new];
+    [manager setValue:audioPlayer forKey:@"audioPlayer"];
+    [innerView setValue:manager forKey:@"hwd_decodeManager"];
+    view.volume = 0.3f;
+    XCTAssertEqual(audioPlayer.volume, 0.3f);
+    view.volume = 0.0f;
+    XCTAssertEqual(audioPlayer.volume, 0.0f);
 }
 
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+- (void)testDecodedWrapViewKeepsExistingDefaults {
+    QGVAPWrapView *view = [[QGVAPWrapView alloc] initWithFrame:CGRectZero];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:view];
+    QGVAPWrapView *decodedView = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    XCTAssertNotNil(decodedView);
+    XCTAssertEqual(decodedView.volume, 1.0f);
+    XCTAssertFalse(decodedView.autoDestoryAfterFinish);
+}
+
+- (void)testWrapVolumeSurvivesInnerViewRecreation {
+    QGVAPWrapView *view = [[QGVAPWrapView alloc] initWithFrame:CGRectZero];
+    XCTAssertEqual(view.volume, 1.0f);
+    view.volume = 0.5f;
+    UIView *innerView = [view valueForKey:@"vapView"];
+    XCTAssertEqual(innerView.volume, 0.5f);
+    view.volume = 2.0f;
+    XCTAssertEqual(view.volume, 1.0f);
+    view.volume = NAN;
+    XCTAssertEqual(view.volume, 1.0f);
+    view.volume = 0.5f;
+    view.volume = NAN;
+    XCTAssertEqual(view.volume, 0.5f);
+    XCTAssertEqual(innerView.volume, 0.5f);
+    [innerView removeFromSuperview];
+    [view setValue:nil forKey:@"vapView"];
+    [view setMute:NO];
+    UIView *recreatedView = [view valueForKey:@"vapView"];
+    XCTAssertNotEqual(innerView, recreatedView);
+    XCTAssertEqual(recreatedView.volume, 0.5f);
 }
 
 @end
