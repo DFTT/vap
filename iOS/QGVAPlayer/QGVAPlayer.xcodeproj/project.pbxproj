@@ -87,7 +87,7 @@
 		63AFC6B8231E3D4A00E127F9 /* QGVAPMetalShaderFunctionLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AFC6B6231E3D4A00E127F9 /* QGVAPMetalShaderFunctionLoader.m */; };
 		63BAD37822F0966300EAD4C4 /* UIDevice+VAPUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 63BAD37622F0966300EAD4C4 /* UIDevice+VAPUtil.h */; };
 		63BAD37922F0966300EAD4C4 /* UIDevice+VAPUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BAD37722F0966300EAD4C4 /* UIDevice+VAPUtil.m */; };
-		649EF40D24122B4D00164950 /* QGVAPMaskInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 649EF40B24122B4C00164950 /* QGVAPMaskInfo.h */; };
+		649EF40D24122B4D00164950 /* QGVAPMaskInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 649EF40B24122B4C00164950 /* QGVAPMaskInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		649EF40E24122B4D00164950 /* QGVAPMaskInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 649EF40C24122B4C00164950 /* QGVAPMaskInfo.m */; };
 /* End PBXBuildFile section */
 

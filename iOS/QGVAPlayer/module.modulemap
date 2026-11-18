@@ -1,0 +1,7 @@
+module QGVAPlayer {
+    header "QGVAPlayer/Classes/UIView+VAP.h"
+    header "QGVAPlayer/Classes/QGVAPWrapView.h"
+    header "QGVAPlayer/Classes/Models/QGVAPConfigModel.h"
+    header "QGVAPlayer/Classes/Models/QGMP4AnimatedImageFrame.h"
+    export *
+}

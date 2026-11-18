@@ -5,7 +5,7 @@
 VAP是企鹅电竞实现大礼物特效的高性能组件，基于H.264硬解码实现动画渲染，解决了透明通道的问题，同时支持更加灵活的附加元素融合能力。
 
 ### 一）快速集成
-##### --以下四种方式任选一种即可
+##### --以下五种方式任选一种即可
 1. 源码集成
     - 直接拷贝iOS/QGVAPlayer/QGVAPlayer/下的Classes和Shaders文件夹到工程即可
 
@@ -23,6 +23,13 @@ VAP是企鹅电竞实现大礼物特效的高性能组件，基于H.264硬解码
 4. pods集成
     1）podfile中添加：pod 'QGVAPlayer', :git => '远程库地址', :tag => '1.0.4'
     2）在工程中合适的位置add file，引用pods/QGVAPlayer 中Shaders下的metal文件，⚠️⚠️注意不要拷贝（如果不添加引用的话会导致metal着色器不被编译进default.mtllib）！
+
+5. Swift Package Manager 集成（iOS 8.0+，Swift tools 5.3+）
+    - 在 Xcode 的 File → Add Package Dependencies 中输入本仓库的 Git URL，选择包含 `Package.swift` 的分支或版本，并将 `QGVAPlayer` 产品添加到 App target。旧版本 tag 不包含包配置，不能直接使用。
+    - 本地开发也可以通过 Add Local 添加仓库根目录。
+    - Swift 文件使用 `import QGVAPlayer`；Objective-C 文件使用 `@import QGVAPlayer;`，无需桥接头文件或手动设置 Header Search Paths。
+    - SPM 使用组件内置的 Metal 着色器源码在运行时编译，无需手动添加 `.metal` 文件；首次创建渲染器时会产生着色器编译开销。
+    - 直接通过 SPM 添加本源码包无需手动配置 `-ObjC`。如果另行封装为 `.a` 静态库再接入，需要在最终 App target 的 Other Linker Flags 中包含 `$(inherited) -ObjC`，确保 UIView category 被链接。
 
 ### 二）组件使用
     - 组件对外的接口是基于UIView的category实现的，因此理论上任意view可以播放特效 

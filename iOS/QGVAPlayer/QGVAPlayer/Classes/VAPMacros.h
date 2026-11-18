@@ -48,9 +48,14 @@ return cValue; \
 }
 #endif
 
-#import "QGHWDShaderTypes.h"
 #import <UIKit/UIKit.h>
+#if __has_include("../Shaders/QGHWDShaderTypes.h")
+#import "../Shaders/QGHWDShaderTypes.h"
+#import "Models/QGVAPMaskInfo.h"
+#else
+#import "QGHWDShaderTypes.h"
 #import "QGVAPMaskInfo.h"
+#endif
 
 extern NSInteger const kQGHWDMP4DefaultFPS;      //默认fps 25
 extern NSInteger const kQGHWDMP4MinFPS;          //最小fps 1

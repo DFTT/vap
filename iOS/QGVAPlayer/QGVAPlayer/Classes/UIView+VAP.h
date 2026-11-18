@@ -15,7 +15,11 @@
 
 #import <UIKit/UIKit.h>
 #import "VAPMacros.h"
+#if __has_include("Utils/Logger/QGVAPLogger.h")
+#import "Utils/Logger/QGVAPLogger.h"
+#else
 #import "QGVAPLogger.h"
+#endif
 
 // 退后台时的行为
 typedef NS_ENUM(NSUInteger, HWDMP4EBOperationType) {
